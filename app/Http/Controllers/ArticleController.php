@@ -11,15 +11,14 @@ class ArticleController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
+    {
     try {
-        $articles = Article::with('scategorie')->get();
-        return response()->json($articles);
+    $articles=Article::with('scategorie')->get(); // Inclut la sous catégorie liée;
+    return response()->json($articles,200);
     } catch (\Exception $e) {
-        $statusCode = ($e->getCode() >= 100 && $e->getCode() < 600) ? $e->getCode() : 500;  // Utilise 500 si le code n'est pas un code HTTP valide
-        return response()->json($e->getMessage(), $statusCode);
+    return response()->json("Sélection impossible {$e->getMessage()}");
     }
-}
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -74,13 +73,13 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Article $article)
+    public function destroy($id)
     {
         try {
             
             $article=Article::findOrFail($id);
-            $articles->delete();
-            return response()->json("article supprime avec succes");
+            $article->delete();
+            return response()->json("catégorie supprimée avec succes");
         } catch (\Exception $e) {
         return response()->json($e->getMessage(),$e->getCode());
     }
