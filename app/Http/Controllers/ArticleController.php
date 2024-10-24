@@ -11,15 +11,15 @@ class ArticleController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        try {
-        $articles = Article::With("scategorie")->get();
+{
+    try {
+        $articles = Article::with('scategorie')->get();
         return response()->json($articles);
     } catch (\Exception $e) {
-        return response()->json($e->getMessage(),$e->getCode());
+        $statusCode = ($e->getCode() >= 100 && $e->getCode() < 600) ? $e->getCode() : 500;  // Utilise 500 si le code n'est pas un code HTTP valide
+        return response()->json($e->getMessage(), $statusCode);
     }
-        
-    }
+}
 
     /**
      * Store a newly created resource in storage.
